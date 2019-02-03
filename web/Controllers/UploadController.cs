@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 
-public class UploadController : Controller
+namespace web.Controllers
+{
+    public class UploadController : Controller
     {
         [HttpGet]
         public ActionResult Index() {
@@ -12,3 +14,5 @@ public class UploadController : Controller
             return View(viewName:"Upload");
         }
     }
+
+}
