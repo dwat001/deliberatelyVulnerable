@@ -1,7 +1,15 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using System;
 
 namespace web.Controllers
 {
+    public class ImageUploadedModel
+    {
+        public string Path { get; set; }
+    }
+
     public class UploadController : Controller
     {
         [HttpGet]
@@ -10,9 +18,14 @@ namespace web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(object o ) {
-            return View(viewName:"Upload");
+        public ActionResult UploadImage(IFormFile file ) {
+            string path = "wwwroot/uploads/" + file.FileName;
+            FileInfo info = new FileInfo(path);
+            Console.WriteLine(info.FullName);
+            using(var stream = info.OpenWrite()) {
+                file.CopyTo(stream);
+                return View(new ImageUploadedModel{Path = "/uploads/" + file.FileName});
+            }
         }
     }
-
 }
