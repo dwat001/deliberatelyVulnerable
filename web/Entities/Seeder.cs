@@ -10,29 +10,50 @@ namespace web.Entities
     {
         readonly MyDbContext _dbContext;
         readonly UserManager<IdentityUser> _userManager;
+        readonly RoleManager<IdentityRole> _roleManager;
 
-        public Seeder(MyDbContext dbContext, UserManager<IdentityUser> userManager)
+        public Seeder(MyDbContext dbContext, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task Seed() {
             await SeedDatabase();
+            await CreateRole(Roles.Admin);
             await SeedUsers();
         }
 
-        async Task SeedUsers()
+        async Task CreateRole(string name)
         {
-            await CreateUserWithPassword("admin", "admin");
+            var role = new IdentityRole
+            {
+                Name = name
+            };
+
+            var result = await _roleManager.CreateAsync(role);
+            if(result.Succeeded == false)
+            {
+                var exception = new InvalidOperationException("Failed to create role " + name);
+                exception.Data["Errors"] = result.Errors;
+                throw exception;
+            }
         }
 
-        async Task CreateUserWithPassword(string userName, string password)
+
+       async Task SeedUsers()
+        {
+            await CreateUserWithPasswordAndRoles("attacker", "password");
+            await CreateUserWithPasswordAndRoles("admin", "admin", Roles.Admin);
+        }
+
+        async Task CreateUserWithPasswordAndRoles(string userName, string password, params string[] roles)
         {
             
             var user = new IdentityUser
             {
-                UserName = "admin"
+                UserName = userName
             };
 
             var createResult = await _userManager.CreateAsync(user);
@@ -49,6 +70,16 @@ namespace web.Entities
                 var exception = new InvalidOperationException("Failed to set password for user " + userName);
                 exception.Data["Errors"] = addPasswordResult.Errors;
                 throw exception;
+            }
+
+            if(roles.Any()) {
+                var addRoleResult = await _userManager.AddToRolesAsync(user, roles);
+                if(addRoleResult.Succeeded == false)
+                {
+                    var exception = new InvalidOperationException("Failed to set roles for user " + userName);
+                    exception.Data["Errors"] = addRoleResult.Errors;
+                    throw exception;
+                }
             }
         }
 
