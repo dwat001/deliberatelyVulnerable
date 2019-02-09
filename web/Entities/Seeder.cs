@@ -34,13 +34,22 @@ namespace web.Entities
             {
                 UserName = "admin"
             };
-            
-            if((await _userManager.CreateAsync(user)).Succeeded == false)
+
+            var createResult = await _userManager.CreateAsync(user);
+            if (createResult.Succeeded == false)
             {
-                throw new InvalidOperationException("Failed to create user " + userName);
+                var exception = new InvalidOperationException("Failed to create user " + userName);
+                exception.Data["Errors"] = createResult.Errors;
+                throw exception;
             }
 
-            await _userManager.AddPasswordAsync(user, password);
+            var addPasswordResult = await _userManager.AddPasswordAsync(user, password);
+            if (addPasswordResult.Succeeded == false)
+            {
+                var exception = new InvalidOperationException("Failed to set password for user " + userName);
+                exception.Data["Errors"] = addPasswordResult.Errors;
+                throw exception;
+            }
         }
 
         async Task SeedDatabase()
