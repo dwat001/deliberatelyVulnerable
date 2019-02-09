@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using web.Entities;
 
 namespace web.Controllers
@@ -16,11 +17,33 @@ namespace web.Controllers
             _dbContext = dbContext;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var posts = _dbContext.Posts.Take(25).ToList();
+            var posts = await _dbContext.Posts.ToListAsync();
 
             return View(posts);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Post post)
+        {
+
+            var postToAdd = new Post
+            {
+                Html = post.Html,
+                Created = DateTimeOffset.Now
+            };
+
+            _dbContext.Posts.Add(postToAdd);
+            await _dbContext.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
     }
 }

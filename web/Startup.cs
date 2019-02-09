@@ -26,10 +26,8 @@ namespace web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var dbConnectionString = Configuration.GetConnectionString("MyDb");
-
             services.AddDbContext<MyDbContext>(
-                options => options.UseSqlServer(dbConnectionString));
+                options => options.UseInMemoryDatabase("DeliberatelyVulnerable"));
 
             services.Configure<CookiePolicyOptions>(options =>
             {

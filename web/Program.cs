@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using web.Entities;
 
 namespace web
 {
@@ -14,11 +16,24 @@ namespace web
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            var webHost = CreateWebHostBuilder(args).Build();
+            InitializeDb(webHost);
+            webHost.Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
+
+        static void InitializeDb(IWebHost webHost)
+        {
+            var scopeFactory = (IServiceScopeFactory)webHost.Services.GetService(typeof(IServiceScopeFactory));
+
+            using(var scope = scopeFactory.CreateScope())
+            {
+                var seeder = ActivatorUtilities.CreateInstance<Seeder>(scope.ServiceProvider);
+                seeder.Seed();
+            }
+        }
     }
 }
