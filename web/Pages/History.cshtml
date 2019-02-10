@@ -1,0 +1,25 @@
+﻿@page
+@model web.Pages.HistoryModel
+@{
+    ViewData["Title"] = "History";
+    Layout = "_Layout";
+}
+
+<h2>History</h2>
+
+<table class="table">
+    <tr>
+        <th>Location</th>
+        <th>Date</th>
+        <th>Amount</th>
+    </tr>
+
+    @foreach(var item in Model.Items)
+    {
+        <tr>
+            <td>@item.Location</td>
+            <td>@item.Date</td>
+            <td>@item.Amount</td>
+        </tr>
+    }
+</table>
