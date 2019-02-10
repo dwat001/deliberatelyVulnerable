@@ -27,6 +27,9 @@ namespace web.Pages
 
         public IEnumerable<HistoryItem> Items { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string OrderBy { get; set; }
+
         public async Task OnGet()
         {
             Items = await QueryDatabase();
@@ -41,7 +44,13 @@ namespace web.Pages
             {
                 await connection.OpenAsync();
 
-                using (var command = new NpgsqlCommand("SELECT Location, Date, Amount FROM History", connection))
+                string query = "SELECT Location, Date, Amount FROM History";
+                if(OrderBy != null)
+                {
+                    query += " ORDER BY " + OrderBy;
+                }
+
+                using (var command = new NpgsqlCommand(query, connection))
                 using (var reader = await command.ExecuteReaderAsync())
                 {
                     while (await reader.ReadAsync())
