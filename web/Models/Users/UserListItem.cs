@@ -8,6 +8,7 @@ namespace web.Models.Users
     public class UserListItem
     {
         public string UserName { get; set; }
+        public string DisplayName { get; set; }
         public bool IsAdmin { get; set; }
     }
 }

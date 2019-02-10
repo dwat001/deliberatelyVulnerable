@@ -29,6 +29,7 @@ namespace web.Controllers
                 .AsEnumerable()
                 .Select(async x => new UserListItem {
                     UserName = x.UserName,
+                    DisplayName = x.DisplayName,
                     IsAdmin = await _userManager.IsInRoleAsync(x, Roles.Admin)
                 });
 
@@ -50,6 +51,7 @@ namespace web.Controllers
                 EmailAddress = user.Email,
                 Id = user.Id,
                 UserName = user.UserName,
+                DisplayName = user.DisplayName,
                 IsAdmin = await _userManager.IsInRoleAsync(user, Roles.Admin)
             });
         }
