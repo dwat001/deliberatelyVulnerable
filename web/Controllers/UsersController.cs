@@ -14,9 +14,9 @@ namespace web.Controllers
     public class UsersController : Controller
     {
         readonly MyDbContext _dbContext;
-        readonly UserManager<IdentityUser> _userManager;
+        readonly UserManager<MyUser> _userManager;
 
-        public UsersController(MyDbContext dbContext, UserManager<IdentityUser> userManager)
+        public UsersController(MyDbContext dbContext, UserManager<MyUser> userManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;

@@ -32,7 +32,7 @@ namespace web
             services.AddDbContext<MyDbContext>(
                 options => options.UseInMemoryDatabase("DeliberatelyVulnerable"));
 
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddDefaultIdentity<MyUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<MyDbContext>();
 

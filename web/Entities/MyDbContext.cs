@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace web.Entities
 {
-    public class MyDbContext : IdentityDbContext<IdentityUser>
+    public class MyDbContext : IdentityDbContext<MyUser>
     {
         public DbSet<Post> Posts { get; set; }
 
