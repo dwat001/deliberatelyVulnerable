@@ -17,7 +17,9 @@ namespace web
         public static void Main(string[] args)
         {
             var webHost = CreateWebHostBuilder(args).Build();
-            InitializeDb(webHost);
+
+            InitializeDb(webHost).Wait();
+
             webHost.Run();
         }
 
@@ -25,14 +27,14 @@ namespace web
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
 
-        static void InitializeDb(IWebHost webHost)
+        static async Task InitializeDb(IWebHost webHost)
         {
             var scopeFactory = (IServiceScopeFactory)webHost.Services.GetService(typeof(IServiceScopeFactory));
 
             using(var scope = scopeFactory.CreateScope())
             {
                 var seeder = ActivatorUtilities.CreateInstance<Seeder>(scope.ServiceProvider);
-                seeder.Seed();
+                await seeder.Seed();
             }
         }
     }
