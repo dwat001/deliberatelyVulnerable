@@ -33,6 +33,7 @@ namespace web
                 options => options.UseInMemoryDatabase("DeliberatelyVulnerable"));
 
             services.AddDefaultIdentity<IdentityUser>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<MyDbContext>();
 
             services.Configure<IdentityOptions>(options => {
