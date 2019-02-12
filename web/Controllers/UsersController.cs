@@ -22,6 +22,7 @@ namespace web.Controllers
             _userManager = userManager;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var userTasks = _userManager.Users
@@ -34,6 +35,43 @@ namespace web.Controllers
             var users = await Task.WhenAll(userTasks);
 
             return View(users);
-        } 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(string userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            if(user == null)
+            {
+                return NotFound();
+            }
+
+            return View(new UserDetails {
+                EmailAddress = user.Email,
+                Id = user.Id,
+                UserName = user.UserName,
+                IsAdmin = await _userManager.IsInRoleAsync(user, Roles.Admin)
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ToggleAdmin(string userName, bool admin)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if(admin)
+            {
+                await _userManager.AddToRoleAsync(user, Roles.Admin);
+            } else
+            {
+                await _userManager.RemoveFromRoleAsync(user, Roles.Admin);
+            }
+
+            return Json(admin);
+        }
     }
 }

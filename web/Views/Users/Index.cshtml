@@ -16,7 +16,9 @@
     @foreach (var user in Model)
     {
         <tr>
-            <td>@user.UserName</td>
+            <td>
+                <a href="@Url.Action("Details", new { UserName = user.UserName })">@user.UserName</a>
+            </td>
             <td>@user.IsAdmin</td>
         </tr>
     }
