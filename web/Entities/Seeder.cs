@@ -9,10 +9,10 @@ namespace web.Entities
     public class Seeder
     {
         readonly MyDbContext _dbContext;
-        readonly UserManager<IdentityUser> _userManager;
+        readonly UserManager<MyUser> _userManager;
         readonly RoleManager<IdentityRole> _roleManager;
 
-        public Seeder(MyDbContext dbContext, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public Seeder(MyDbContext dbContext, UserManager<MyUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;
@@ -51,9 +51,10 @@ namespace web.Entities
         async Task CreateUserWithPasswordAndRoles(string userName, string password, params string[] roles)
         {
             
-            var user = new IdentityUser
+            var user = new MyUser
             {
-                UserName = userName
+                UserName = userName,
+                DisplayName = userName
             };
 
             var createResult = await _userManager.CreateAsync(user);
