@@ -1,12 +1,12 @@
-INSERT INTO CreditCard (pan, expiry_month, expiry_year)
+INSERT INTO credit_card (full_name, pan, expiry_month, expiry_year)
 VALUES
-('5555555555554444', 10, 20),
-('5105105105105100', 01, 21),
-('4111111111111111', 07, 19),
-('4012888888881881', 06, 20),
-('4222222222222', 11, 20);
+('Test Mastercard', '5555555555554444', 10, 20),
+('Test Mastercard 2', '5105105105105100', 01, 21),
+('Test Visa', '4111111111111111', 07, 19),
+('Test Visa 2', '4012888888881881', 06, 20),
+('Test Visa 3', '4222222222222', 11, 20);
 
-INSERT INTO History (location, date, amount)
+INSERT INTO history (location, date, amount)
 VALUES
 ('Simplex Shop', '2019/01/01 01:48:50', 253.65),
 ('Raven Shop', '2019/01/01 03:51:42', 542.69),
