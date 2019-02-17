@@ -1,0 +1,33 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build web",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/web/web.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build exploit",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/exploit/exploit.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build",
+            "type": "process",
+            "dependsOn": [
+                "build web",
+                "build exploit"
+            ]
+        }
+    ]
+}
