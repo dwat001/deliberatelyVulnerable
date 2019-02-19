@@ -21,7 +21,7 @@ namespace web.Controllers
         public ActionResult UploadImage(IFormFile file ) {
             string path = "wwwroot/uploads/" + file.FileName;
             FileInfo info = new FileInfo(path);
-            Console.WriteLine(info.FullName);
+            Console.Error.WriteLine(info.FullName);
             using(var stream = info.OpenWrite()) {
                 file.CopyTo(stream);
                 return View(new ImageUploadedModel{Path = "/uploads/" + file.FileName});
