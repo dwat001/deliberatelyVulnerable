@@ -27,5 +27,10 @@ namespace web.Controllers
                 return View(new ImageUploadedModel{Path = "/uploads/" + file.FileName});
             }
         }
+
+        [HttpGet]
+        public ActionResult Profile() {
+            return View();
+        }
     }
 }
